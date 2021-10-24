@@ -66,7 +66,6 @@ class BooksApp extends React.Component {
       this.setState({books:this.state.books})
     }
   
-
   search =(e)=>{this.setState({ trim: e })}
   render() {
     return (

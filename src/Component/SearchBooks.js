@@ -1,8 +1,7 @@
 import React  from "react";
 import { Link } from "react-router-dom";
 
-function SearchBooks(props){
-    
+function SearchBooks(props){    
     const {searchResult,trim,books} = props.state;
     console.log(searchResult)
     let result = <li>no result</li>
