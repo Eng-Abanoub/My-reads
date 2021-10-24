@@ -3,13 +3,21 @@ import { Link } from "react-router-dom";
 
 function SearchBooks(props){
     
-    const {searchResult,trim} = props.state;
+    const {searchResult,trim,books} = props.state;
     console.log(searchResult)
     let result = <li>no result</li>
     if(Array.isArray(searchResult)){
-    result = searchResult.map((book) => {
-        console.log(book);
-        if(!book.hasOwnProperty('authors')) book.authors=['unknown'];  
+    result = searchResult.map((book) => {      
+        if(!book.hasOwnProperty('authors')) book.authors=['unknown'];
+        let authors = book.authors.map((auther,index) => {
+          return (<div key={index} className="book-authors">{auther}</div>)
+        })
+        books.filter((data)=>{
+          if(data.id===book.id){
+            book.shelf=data.shelf
+            console.log(data.shelf)
+          }
+        })
         if(book.hasOwnProperty('imageLinks'))
         return (
           <li key={book.id}>
@@ -17,7 +25,7 @@ function SearchBooks(props){
               <div className="book-top">
                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                 <div className="book-shelf-changer">
-                  <select name={book.id} onChange={e=>props.handelChange(e)}>
+                  <select value={book.shelf || 'none'} name={book.id} onChange={e=>props.handelChange(e)}>
                     <option value="move" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
@@ -27,7 +35,7 @@ function SearchBooks(props){
                 </div>
               </div>
               <div className="book-title">{book.title}</div>
-              <div className="book-authors">{book.authors[0]}</div>
+              {authors}
             </div>
           </li>)
         });

@@ -3,16 +3,22 @@ import React from "react";
 import { Link } from "react-router-dom";
 function ListBooks(props) {
   const { books } = props.books
-  console.log(books)
 
   let reading = books.filter((book) => book.shelf === 'read').map((book) => {
+
+    let authors = book.authors.map((auther,index) => {
+      return (
+        <div key={index} className="book-authors">{auther}</div>
+      )
+    })
+
     return (
       <li key={book.id}>
         <div className="book">
           <div className="book-top">
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
             <div className="book-shelf-changer">
-              <select name={book.id} onChange={e=>props.handelChange(e)}>
+              <select value={book.shelf} name={book.id} onChange={e => props.handelChange(e)}>
                 <option value="move" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
@@ -22,18 +28,26 @@ function ListBooks(props) {
             </div>
           </div>
           <div className="book-title">{book.title}</div>
+          {authors}
+          {/*           
           <div className="book-authors">{book.authors[0]}</div>
+          <div className="book-authors">{book.authors[0]}</div> */}
         </div>
       </li>)
   })
   let currentlyReading = books.filter((book) => book.shelf === 'currentlyReading').map((book) => {
+    let authors = book.authors.map((auther,index) => {
+      return (
+        <div key={index} className="book-authors">{auther}</div>
+      )
+    })
     return (
       <li key={book.title}>
         <div className="book">
           <div className="book-top">
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
             <div className="book-shelf-changer">
-              <select name={book.id} onChange={e=>props.handelChange(e)}>
+              <select value={book.shelf} name={book.id} onChange={e => props.handelChange(e)}>
                 <option value="move" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
@@ -43,18 +57,23 @@ function ListBooks(props) {
             </div>
           </div>
           <div className="book-title">{book.title}</div>
-          <div className="book-authors">{book.authors[0]}</div>
+          {authors}
         </div>
       </li>)
   })
   let wantToRead = books.filter((book) => book.shelf === 'wantToRead').map((book) => {
+    let authors = book.authors.map((auther,index) => {
+      return (
+        <div key={index} className="book-authors">{auther}</div>
+      )
+    })
     return (
       <li key={book.title}>
         <div className="book">
           <div className="book-top">
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
             <div className="book-shelf-changer">
-              <select name={book.id} onChange={e=>props.handelChange(e)}>
+              <select value={book.shelf} name={book.id} onChange={e => props.handelChange(e)}>
                 <option value="move" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
@@ -64,11 +83,10 @@ function ListBooks(props) {
             </div>
           </div>
           <div className="book-title">{book.title}</div>
-          <div className="book-authors">{book.authors[0]}</div>
+          {authors}
         </div>
       </li>)
   })
-  console.log(reading)
 
   return (
     <div className="list-books">
@@ -81,7 +99,7 @@ function ListBooks(props) {
             <h2 className="bookshelf-title">Currently Reading</h2>
             <div className="bookshelf-books">
               <ol className="books-grid">
-              {currentlyReading}             
+                {currentlyReading}
               </ol>
             </div>
           </div>
@@ -89,7 +107,7 @@ function ListBooks(props) {
             <h2 className="bookshelf-title">Want to Read</h2>
             <div className="bookshelf-books">
               <ol className="books-grid">
-              {wantToRead}
+                {wantToRead}
               </ol>
             </div>
           </div>
@@ -105,8 +123,7 @@ function ListBooks(props) {
       </div>
       <div className="open-search">
         <Link to='/search'>
-
-        <button>Add a book<Link to='/search'/></button>
+          <button>Add a book</button>
         </Link>
       </div>
     </div>
