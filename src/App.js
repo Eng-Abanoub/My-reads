@@ -32,39 +32,63 @@ class BooksApp extends React.Component {
     const shelf = e.target.value
     const bookId = e.target.name
     console.log(e.target.value)
-    let newBooks=this.state.books.map((book)=>{
+    let newBooks = this.state.books
+    let updated = false;
+    newBooks=this.state.books.map((book)=>{
       if(book.id===bookId){
         book.shelf=shelf
         BooksAPI.update(book,shelf).then((data)=>console.log(data))
         console.log(book)
-        return book
+        updated = true;
+        if(shelf=="none"){
+          return {}
+        }else{
+          return book
+        }
       }
+      // else if(shelf=="none"){
+      //   console.log('delete')
+      //   return null
+      // }
       else return book
     })
-    this.setState({books:newBooks})
-
-  }
-  handelChange2=(e)=>{
-    const shelf = e.target.value
-    const bookId = e.target.name
-    console.log(e.target.value)
-
-    BooksAPI.get(bookId).then((book)=>{
-      book.shelf=shelf
-      BooksAPI.update(book,shelf).then((data)=>{console.log(data)})
-
-    })
-      const result = this.state.searchResult.filter((book)=>{
-        if(book.id==bookId){
-          console.log(book.shelf)
-          book.shelf=shelf
-          console.log(book.shelf)
-        }
-        return book
-        });
-        this.setState({searchResult:result})  
-      this.setState({books:this.state.books})
+    if(updated){
+      this.setState({books:newBooks})
+    }else{
+      newBooks = this.state.books
+      console.log(newBooks);
+      BooksAPI.get(bookId).then((book)=>{
+        book.shelf=shelf
+        BooksAPI.update(book,shelf).then((data)=>{console.log(data)})
+        newBooks.push(book)
+        this.setState({books:newBooks})
+      })
     }
+  }
+  // handelChange2=(e)=>{
+  //   const shelf = e.target.value
+  //   const bookId = e.target.name
+  //   let newBooks = this.state.books
+  //   console.log(newBooks);
+  //   console.log(e.target.value)
+  //   BooksAPI.get(bookId).then((book)=>{
+  //     book.shelf=shelf
+  //     BooksAPI.update(book,shelf).then((data)=>{console.log(data)})
+  //     newBooks = newBooks.push(book)
+  //   })
+  //   console.log(newBooks);
+  //   this.setState({books:newBooks})
+  //     const result = this.state.searchResult.filter((book)=>{
+  //       if(book.id==bookId){
+  //         console.log(book.shelf)
+  //         book.shelf=shelf
+  //         console.log(book.shelf)
+  //       }
+  //       return book
+  //       });
+  //       this.setState({searchResult:result})  
+  //     this.setState({books:this.state.books})
+  //   }
   
   search =(e)=>{this.setState({ trim: e })}
   render() {
@@ -75,7 +99,7 @@ class BooksApp extends React.Component {
         )}/>
 
         <Route path='/search' render={()=>(
-        <SearchBooks handelChange={this.handelChange2} search={this.search} state={this.state}/>
+        <SearchBooks handelChange={this.handelChange} search={this.search} state={this.state}/>
         )} /> 
        </div>
     )
